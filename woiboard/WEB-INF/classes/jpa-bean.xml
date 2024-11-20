@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/data/jpa
+		http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd 
+		http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/cache 
+		http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+
+
+	<context:property-placeholder location="classpath:application.properties" />
+	<context:component-scan base-package="jatis.va.core.repository" />
+	<context:component-scan base-package="jatis.va.core.service" />	
+	<context:component-scan base-package="jatis.va.core.common.util" />	
+	<context:component-scan base-package="jatis.va.core.entity" />	
+	<context:component-scan base-package="jatis.va.main.controller" />
+	<jpa:repositories base-package="jatis.va.core.repository" />
+	
+<!-- 	<jpa:repositories base-package="jatis.va.core.repository.custom" /> -->
+<!--  	<jpa:repositories base-package="com.javainterviewpoint" -->
+<!--         entity-manager-factory-ref="entityManagerFactoryBean"></jpa:repositories> -->
+		
+		
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<property name="connectionTimeout" value="${hikari.pool.connectionTimeout}" />
+		<property name="dataSourceClassName" value="${hikari.pool.class}" />
+<!-- 		<property name="minimumIdle" value="${hikari.pool.minimum.idle}" /> -->
+		<property name="maximumPoolSize" value="${hikari.pool.maximum}" />
+		<property name="maxLifetime" value="${hikari.pool.maxLifetime}" />
+		<property name="idleTimeout" value="${hikari.pool.idleTimeout}" />
+		
+		<property name="connectionTestQuery" value="SELECT 1"></property>
+		<property name="leakDetectionThreshold" value="${hikari.pool.leakDetectionThreshold}" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="serverName">${jdbc.url}</prop>
+				<prop key="databaseName">${jdbc.dbname}</prop>
+				<prop key="user">${jdbc.username}</prop>
+				<prop key="password">${jdbc.password}</prop>
+			</props>
+		</property>
+	</bean>
+
+<!-- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> -->
+<!-- 		<property name="driverClassName" value="${jdbc.driverClassName}" /> -->
+<!-- 		<property name="url" value="${jdbc.url}" /> -->
+<!-- 		<property name="username" value="${jdbc.username}" /> -->
+<!-- 		<property name="password" value="${jdbc.password}" /> -->
+<!-- 		<property name="maxActive" value="100" /> -->
+<!-- 		<property name="maxWait" value="1000" /> -->
+<!-- 		<property name="poolPreparedStatements" value="true" /> -->
+<!-- 		<property name="defaultAutoCommit" value="true" /> -->
+<!-- 		<property name="validationQuery" value="${jdbc.validationQuery}" /> -->
+<!-- 		<property name="testOnBorrow" value="true" /> -->
+<!-- 	</bean> -->
+	
+	<bean name="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceUnitName" value="myJpaPersistenceUnit" />
+        <property name="packagesToScan">
+           <list>
+               <value>jatis.va.core.entity</value>
+           </list>
+        </property>         
+	    <property name="jpaProperties">
+			<props>
+			   <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+			   <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+			   <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+			   <prop key="hibernate.id.new_generator_mappings">${hibernate.id.new_generator_mappings}</prop>		
+			   <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl_auto}</prop>		   
+			</props>
+	    </property>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	    <property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" /> 		
+	
+	<!-- <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" id="taskExecutor">
+	     <property name="corePoolSize" value="5"></property>
+	     <property name="maxPoolSize" value="10"></property>
+	     <property name="queueCapacity" value="40"></property>
+	     <property name="waitForTasksToCompleteOnShutdown" value="true"></property>
+    </bean> -->
+	
+	<bean id="applicationSettingsProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:applicationSettings.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+    	<property name="cacheManager" ref="ehcache"/>
+    </bean>
+    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    	<property name="configLocation" value="classpath:ehcache.xml"/>
+    	<property name="shared" value="true"/>
+    </bean>
+  
+
+  
+  	
+
+</beans> 

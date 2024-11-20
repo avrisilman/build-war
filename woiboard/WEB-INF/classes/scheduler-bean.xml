@@ -1,0 +1,107 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> <beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:jpa="http://www.springframework.org/schema/data/jpa" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd 
+	"> -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+
+
+	<!-- <bean name="balanceRecordCutOff" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"> 
+		<property name="jobClass" value="jatis.va.main.scheduler.BalanceRecord" /> 
+		<property name="jobDataMap"> <map> <entry key="organizationService" value-ref="organizationService" 
+		/> <entry key="organizationBankService" value-ref="organizationBankService" 
+		/> <entry key="organizationAgentService" value-ref="organizationAgentService" 
+		/> <entry key="organizationMemberService" value-ref="organizationMemberService" 
+		/> <entry key="balanceRecordSummaryService" value-ref="balanceRecordSummaryService" 
+		/> </map> </property> <property name="durability" value="true" /> </bean> 
+		<bean id="runBalanceRecord" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+		<property name="jobDetail" ref="balanceRecordCutOff" /> Every 1 minutes <property 
+		name="cronExpression" value="0 0/1 * 1/1 * ? *" /> Every 23:55 a clock <property 
+		name="cronExpression" value="0 55 23 1/1 * ? *" /> </bean> -->
+
+	<bean id="cashoutRecordCutOff" class="jatis.va.main.scheduler.CashoutRecord">
+	</bean>
+
+	<bean name="runCashoutRecord"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="jatis.va.main.scheduler.RunCashoutRecord" />
+		<property name="durability" value="true" />
+	</bean>
+
+
+	<bean id="cronCashoutRecord"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="runCashoutRecord" />
+		<property name="cronExpression" value="0 59 23 * * ?" /> <!-- Every end of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 20 15 * * ?" /> Every end 
+			of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> -->  <!-- Every 1 minutes -->
+		<!-- <property name="cronExpression" value="0 */5 * * * ?" /> --> <!-- Every 5 minutes -->
+	</bean>
+
+	<!-- GL REPORT BEGIN -->
+	<!-- <bean name="generateGLReport" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"> 
+		<property name="jobClass" value="jatis.va.main.scheduler.GenerateGeneralLedgerReport" 
+		/> <property name="jobDataMap"> <map> <entry key="generalLedgerReportService" 
+		value-ref="generalLedgerReportService" /> </map> </property> <property name="durability" 
+		value="true" /> </bean> -->
+	<!-- <bean id="runGenerateGLReport" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+		<property name="jobDetail" ref="generateGLReport" /> Every 1 minutes <property 
+		name="cronExpression" value="0 0/1 * 1/1 * ? *" /> Every 01:00 a clock <property 
+		name="cronExpression" value="0 0 1 1/1 * ? *" /> <property name="cronExpression" 
+		value="0 0 12 1/1 * ? *" /> </bean> -->
+
+	<!-- GL REPORT END -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="autoStartup" value="true" />
+		<property name="applicationContextSchedulerContextKey" value="applicationContext" />
+		<property name="waitForJobsToCompleteOnShutdown" value="true" />
+		<property name="overwriteExistingJobs" value="true" />
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+<!-- 		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property> -->
+		<property name="schedulerContextAsMap">
+			<map>
+				<entry key="cashoutRecordCutOff" value-ref="cashoutRecordCutOff" />
+			</map>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.jobStore.misfireThreshold">6000000</prop>
+				<prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>
+				<!-- <prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.PostgreSQLDelegate</prop> 
+					with postgre -->
+				<prop key="org.quartz.jobStore.isClustered">true</prop>
+				<prop key="org.quartz.jobStore.clusterCheckinInterval">20000</prop>
+				<prop key="org.quartz.scheduler.instanceName">ClusteredScheduler</prop>
+				<prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+				<prop key="org.quartz.scheduler.jmx.export">true</prop>
+				<prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+				<prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>
+				<prop key="org.quartz.jobStore.isClustered">false</prop>
+				<prop key="org.quartz.jobStore.clusterCheckinInterval">20000</prop>
+			</props>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="cronCashoutRecord" />
+			</list>
+		</property>
+	</bean>
+
+
+</beans> 

@@ -1,0 +1,67 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:s="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+
+	<s:http auto-config="true" use-expressions="true"
+		access-decision-manager-ref="defaultAccessDecisionManager">
+		<s:intercept-url pattern="/~./**/*.zul" access="isAuthenticated()" />
+		<s:intercept-url pattern="/login.zul" access="isAnonymous()" />
+		<s:intercept-url pattern="/api/**" access="permitAll()" />
+		<s:intercept-url pattern="/web/**" access="isAuthenticated()" />
+<!-- 		<s:intercept-url pattern="/member/**" access="isAuthenticated()" />
+		<s:intercept-url pattern="/admin/**" access="isAuthenticated()" />  -->
+<!-- 		<s:intercept-url pattern="/transaction/**" access="isAuthenticated()" /> -->
+		<s:intercept-url pattern="/" access="isAuthenticated()" />
+		<s:form-login login-page="/login.zul"
+			authentication-failure-url="/login.zul?login_error=1"
+			login-processing-url="/j.logincheck" />
+		<s:logout logout-url="/logout" logout-success-url="/login.zul" />
+		<s:access-denied-handler error-page="/access_denied.zul" />
+		<s:session-management>
+			<s:concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="true" expired-url="/session_expired.zul" />
+		</s:session-management>
+	</s:http>
+
+	<s:authentication-manager alias="defaultAuthenticationManager">
+		<s:authentication-provider ref="jatisAuthenticationProvider">
+		</s:authentication-provider>
+	</s:authentication-manager>
+
+<!-- 	<bean id="credentialManager" class="jatis.va.core.service.impl.CredentialManagerImpl"> -->
+<!-- 		<property name="sessionFactory" ref="sessionFactory" /> -->
+<!-- 	</bean> -->
+
+	<bean id="jatisAuthenticationProvider"
+		class="jatis.va.core.authentication.JatisVAAuthenticationProvider">
+		<property name="salt" ref="systemWideSalt" />
+		<property name="userDetailsService" ref="jatisUserDetailsService" />
+		<property name="userService" ref="userService" />
+		<property name="activityService" ref="activityService" />
+	</bean>
+
+	<bean id="jatisUserDetailsService" class="jatis.security.userdetails.JatisUserDetailsService">
+		<property name="maxLockoutCount" value="100" />
+		<property name="credentialManager" ref="credentialManager" />
+		<property name="defaultDomain" value="member" />
+	</bean>
+
+	<bean id="systemWideSalt" class="org.springframework.security.authentication.dao.SystemWideSaltSource">
+		<property name="systemWideSalt" value="B*fas#25" />
+	</bean>
+
+	<bean id="defaultAccessDecisionManager" class="jatis.security.authorization.DefaultAffirmativeBased" />
+
+	<bean id="passwordEncoder" class="jatis.security.encoding.JatisPasswordEncoder" />
+
+<!-- 	<bean id="userPasswordGenerator" class="jatis.va.core.service.impl.UserPasswordGeneratorImpl"> -->
+<!-- 		<property name="saltSource" ref="systemWideSalt" /> -->
+<!-- 		<property name="passwordEncoder" ref="passwordEncoder" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="vaAuthorization" class="jatis.va.core.service.impl.AuthorizationImpl" /> -->
+
+</beans>

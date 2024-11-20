@@ -1,0 +1,11 @@
+<zk>
+<window border="none">
+
+<zscript>
+<![CDATA[
+	Executions.sendRedirect("../");
+]]>
+</zscript>
+
+</window>
+</zk>

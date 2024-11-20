@@ -1,0 +1,9 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window id="winEcommerceOrderReciever" border="none"
+		apply="jatis.va.main.controller.EcommerceOrderRecieverComposer">
+	</window>
+
+</zk>

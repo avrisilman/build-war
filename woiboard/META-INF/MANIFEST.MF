@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: jatis.va.main
+Implementation-Version: 0.0.1-SNAPSHOT
+Archiver-Version: Plexus Archiver
+Built-By: David.Magno
+Implementation-Vendor-Id: jatis.va
+SCM-Version: 
+Created-By: Apache Maven 3.6.3
+Build-Jdk: 1.8.0_402
+

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd" >
+
+	<!-- Local Settings -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- <bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://localhost:3306/va_db"
+		p:username="root" p:password="admin">
+	</bean> -->
+
+	<!-- <bean id="dataSource"
+		class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/va_db"/> 
+	</bean> -->
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+		<property name="maximumPoolSize" value="40" />
+		<property name="maxLifetime" value="30000" />
+		<property name="idleTimeout" value="30000" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">jdbc:mysql://localhost:3306/va_db</prop>
+				<prop key="user">staggingdbadmin</prop>
+				<prop key="password">J4t15dbpassw0rd</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Local Settings -->
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="mappingLocations"
+			value="classpath*:jatis/va/core/domain/mapping/hibernate/*.hbm.xml" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">
+					false
+				</prop>
+				<prop key="hibernate.generate_statistics">
+					false
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">
+					update
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!--  * * * * QUARTZ * * * * * -->
+
+    <bean id="writeVaToBaPool" class="jatis.va.main.scheduler.WriteVaToBaPool" >
+    	<property name="vaToBaPoolDao" ref="vaToBaPoolDao" />
+    </bean>
+    <bean id="eventTransferPool" class="jatis.va.main.scheduler.CheckEventTransferPool" >
+    	<property name="organizationEventDao" ref="organizationEventDao" />
+    	<property name="eventTransferPoolDao" ref="eventTransferPoolDao" />
+    	<property name="transactionService" ref="transactionService" />
+    	<property name="systemParameterService" ref="systemParameterService" />
+    	<!-- cek di svn -->
+    	<property name="smsCredentialService" ref="smsCredentialService"></property>
+    </bean>
+    <bean id="balanceRecordCutOff" class="jatis.va.main.scheduler.BalanceRecord" >
+    	<property name="balanceRecordSummaryDao" ref="balanceRecordSummaryDao" />
+    	<property name="organizationDao" ref="organizationDao" />
+    	<property name="eventTransferPoolDao" ref="eventTransferPoolDao" />
+    	<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+    </bean>
+
+    <!-- Spring Quartz -->
+
+     <bean name="runWriteVaToBaPool" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"> 
+        <property name="jobClass" value="jatis.va.main.scheduler.RunWriteVaToBaPool" />
+        <property name="durability" value="true" />
+     </bean>
+
+     <bean name="runEventTransferPool" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"> 
+        <property name="jobClass" value="jatis.va.main.scheduler.RunEventTransferPool" />
+        <property name="durability" value="true" />
+     </bean>
+
+     <bean name="runBalanceRecord" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"> 
+        <property name="jobClass" value="jatis.va.main.scheduler.RunBalanceRecord" />
+        <property name="durability" value="true" />
+     </bean>
+
+     <bean id="cronWriteVaToBaPool" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+        <property name="jobDetail" ref="runWriteVaToBaPool" />
+        <property name="cronExpression" value="0 0 0 * * ?" /> <!-- Every midnight -->
+<!--    <property name="cronExpression" value="0 0 7 ? 1/1 WED#1 *" /> Every 1st Wednesday at 7 AM -->
+<!--	<property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> Every 1 minutes -->
+<!--	<property name="cronExpression" value="*/15 * * * * ?" /> Every 15 seconds   -->
+     </bean>
+     <bean id="cronEventTransferPool" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+        <property name="jobDetail" ref="runEventTransferPool" />
+        <property name="cronExpression" value="0 0 0 * * ?" /> <!-- Every midnight -->
+		<!-- <property name="cronExpression" value="*/15 * * * * ?" /> --> <!-- Every 15 seconds   -->
+     </bean>
+     <bean id="cronBalanceRecord" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+        <property name="jobDetail" ref="runBalanceRecord" />
+        <property name="cronExpression" value="0 59 23 * * ?" /> <!-- Every end of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 */5 * * * ?" /> --> <!-- Every 5 minutes   -->
+     </bean>
+
+    <!--  original Quartz -->
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="autoStartup" value="true"/>
+        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+        <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+        <property name="overwriteExistingJobs" value="true"/>
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="schedulerContextAsMap">
+            <map>
+                <entry key="writeVaToBaPool" value-ref="writeVaToBaPool"/>
+				<entry key="eventTransferPool" value-ref="eventTransferPool" />
+				<entry key="balanceRecordCutOff" value-ref="balanceRecordCutOff" />
+            </map>
+        </property>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.jobStore.misfireThreshold">6000000</prop>
+                <prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>
+				<!--	<prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.PostgreSQLDelegate</prop> with postgre -->
+
+                <prop key="org.quartz.jobStore.isClustered">true</prop>
+                <prop key="org.quartz.jobStore.clusterCheckinInterval">20000</prop>
+
+                <prop key="org.quartz.scheduler.instanceName">ClusteredScheduler</prop>
+                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+                <prop key="org.quartz.scheduler.jmx.export">true</prop>
+                <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
+                <prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>
+                <prop key="org.quartz.jobStore.isClustered">false</prop>
+                <prop key="org.quartz.jobStore.clusterCheckinInterval">20000</prop>
+            </props>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="cronWriteVaToBaPool" />
+                <ref bean="cronEventTransferPool" />
+                <ref bean="cronBalanceRecord" />
+            </list>
+        </property>
+    </bean>
+    <!--  end original Quartz -->
+	
+</beans>

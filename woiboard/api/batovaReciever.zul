@@ -1,0 +1,29 @@
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<label id="output" />
+	<zscript>
+		<![CDATA[
+			import jatis.va.core.integration.service.BankIntegrationService;
+			import jatis.va.core.service.exception.BusinessException;
+			import org.zkoss.zkplus.spring.SpringUtil;
+			import java.math.BigDecimal;
+			
+			import com.google.gson.*;
+
+			import jatis.va.main.json.BaToVaInput;
+			
+			BankIntegrationService bankIntegrationService = (BankIntegrationService) SpringUtil.getBean("bankIntegrationService");
+			
+			Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
+			BaToVaInput input = gson.fromJson(execution.getParameter("json"), BaToVaInput.class);
+			
+			
+			try {
+				String returnData = bankIntegrationService.receiveFundTransferInstruction(input.getAccountNumber(), input.getOrganizationCode(), input.getSourceBankAccount(), input.getSourceBankCode(), input.getAmount());
+				output.setValue(returnData);
+			} catch (BusinessException e) {
+				output.setValue(e.getMessage());
+			}
+		]]>
+	</zscript>
+</zk>

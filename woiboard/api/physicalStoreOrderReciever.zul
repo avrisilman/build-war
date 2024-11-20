@@ -1,0 +1,27 @@
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<label id="output" />
+	<zscript>
+		<![CDATA[
+			import jatis.va.core.integration.service.MerchantIntegrationService;;
+			import jatis.va.core.service.exception.BusinessException;
+			import org.zkoss.zkplus.spring.SpringUtil;
+			import java.math.BigDecimal;
+
+			MerchantIntegrationService merchantIntegrationService = (MerchantIntegrationService) SpringUtil.getBean("merchantIntegrationService");
+
+			Long orderId = jatis.va.core.common.util.FormatterUtil.parseToLong(execution.getParameter("orderId"));
+			String accountNumber = execution.getParameter("accountNumber");
+			BigDecimal amount = new BigDecimal(execution.getParameter("amount"));
+			Long merchantCode = jatis.va.core.common.util.FormatterUtil.parseToLong(execution.getParameter("merchantCode"));
+			String currency = execution.getParameter("currency");
+
+			try {
+				String returnData = merchantIntegrationService.addPhysicalStoreOrder(orderId, accountNumber, amount, merchantCode, currency);
+				output.setValue(returnData);
+			} catch (BusinessException e) {
+				output.setValue(e.getMessage());
+			}
+		]]>
+	</zscript>
+</zk>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+	
+	<mapping class="jatis.va.core.domain.AccountBalance" />
+	<mapping class="jatis.va.core.domain.AccountChange" />
+	<mapping class="jatis.va.core.domain.AccountRule" />
+	<mapping class="jatis.va.core.domain.AccountRuleOrganization" />
+	<mapping class="jatis.va.core.domain.AccountType" />
+	<mapping class="jatis.va.core.domain.Activity" />
+	<mapping class="jatis.va.core.domain.Address" />
+	<mapping class="jatis.va.core.domain.Agent" />
+	<mapping class="jatis.va.core.domain.AgentAccount" />
+	<mapping class="jatis.va.core.domain.AuditLog" />
+	<mapping class="jatis.va.core.domain.BalanceRecordDaily" />
+	<mapping class="jatis.va.core.domain.BalanceRecordSummary" />
+	<mapping class="jatis.va.core.domain.Bank" />
+	<mapping class="jatis.va.core.domain.BankApi" />
+	<mapping class="jatis.va.core.domain.BankBranch" />
+	<mapping class="jatis.va.core.domain.Biller" />
+	<mapping class="jatis.va.core.domain.BillerType" />
+	<mapping class="jatis.va.core.domain.CashbackPool" />
+	
+	<mapping class="jatis.va.core.domain.DestinationType" />
+	<mapping class="jatis.va.core.domain.ErrorLog" />
+	<mapping class="jatis.va.core.domain.EventTransferPool" />
+	<mapping class="jatis.va.core.domain.FeeCharges" />
+	<mapping class="jatis.va.core.domain.Function" />
+	<mapping class="jatis.va.core.domain.FunctionGroup" />
+	<mapping class="jatis.va.core.domain.FunctionMatrix" />
+	<mapping class="jatis.va.core.domain.Lookup" />
+	<mapping class="jatis.va.core.domain.MasterRule" />
+	<mapping class="jatis.va.core.domain.Membership" />
+	<mapping class="jatis.va.core.domain.MembershipBank" />
+	<mapping class="jatis.va.core.domain.MemberTemp" />
+	<mapping class="jatis.va.core.domain.Menu" />
+	
+	<mapping class="jatis.va.core.domain.Organization" />
+	<mapping class="jatis.va.core.domain.OrganizationAgent" />
+	<mapping class="jatis.va.core.domain.OrganizationBank" />
+	<mapping class="jatis.va.core.domain.OrganizationBiller" />
+	<mapping class="jatis.va.core.domain.OrganizationCredential" />
+	
+	<mapping class="jatis.va.core.domain.OrganizationMember" />
+	<mapping class="jatis.va.core.domain.People" />
+	<mapping class="jatis.va.core.domain.RefundRules" />
+	<mapping class="jatis.va.core.domain.Region" />
+	<mapping class="jatis.va.core.domain.SmsContent" />
+	<mapping class="jatis.va.core.domain.SmsCredential" />
+	
+	<mapping class="jatis.va.core.domain.SmsCredential" />
+	<mapping class="jatis.va.core.domain.SmsLog" />
+	<mapping class="jatis.va.core.domain.SystemParameter" />
+	<mapping class="jatis.va.core.domain.TransactionFee" />
+	<mapping class="jatis.va.core.domain.TransactionFeeOrganization" />
+	<mapping class="jatis.va.core.domain.TransactionHeader" />
+	<mapping class="jatis.va.core.domain.TransactionLine" />
+	
+	<mapping class="jatis.va.core.domain.TransactionType" />
+	<mapping class="jatis.va.core.domain.User" />
+	<mapping class="jatis.va.core.domain.VaToBaPool" />
+	<mapping class="jatis.va.core.domain.WorkingDaysLine" />
+	
+	</session-factory>
+</hibernate-configuration>

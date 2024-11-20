@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd" >
+
+<!-- 	<bean id="pdsWS" class="jatis.va.main.services.PdsWS"> -->
+<!-- 		<property name="pdsProcessor" ref="pdsProcessor" /> -->
+<!-- 		<property name="whiteList" > -->
+<!-- 			<list> -->
+<!-- 				<value>10.0.2.10</value> -->
+<!-- 				<value>10.0.2.11</value> -->
+<!-- 				<value>52.76.229.157</value> -->
+<!-- 				<value>10.10.1.111</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="pdsProcessor" class="jatis.va.main.services.processor.PdsProcessorImpl"> -->
+<!-- 		<property name="transactionService" ref="transactionService" /> -->
+<!-- 		<property name="membershipService" ref="membershipService" /> -->
+<!-- 		<property name="memberAccountService" ref="memberAccountService" /> -->
+<!-- 		<property name="bankService" ref="bankService"/> -->
+<!-- 		<property name="agentService" ref="agentService" /> -->
+<!-- 		<property name="agentAccountService" ref="agentAccountService" /> -->
+<!-- 		<property name="userPasswordGenerator" ref="userPasswordGenerator" /> -->
+<!-- 		<property name="systemParameterService" ref="systemParameterService" /> -->
+<!-- 		<property name="peopleService" ref="peopleService" /> -->
+<!-- 		<property name="transactionHeaderService" ref="transactionHeaderService" /> -->
+<!-- 		<property name="registrationService" ref="registrationService" /> -->
+<!-- 		<property name="merchantService" ref="merchantService" /> -->
+<!-- 		<property name="accountTypeService" ref="accountTypeService" /> -->
+<!-- 		<property name="organizationMemberService" ref="organizationMemberService" /> -->
+<!-- 		<property name="organizationAgentService" ref="organizationAgentService" /> -->
+<!-- 		<property name="workingDaysLineService" ref="workingDaysLineService" /> -->
+<!-- 		<property name="feeChargesService" ref="feeChargesService" /> -->
+<!-- 		<property name="lookupService" ref="lookupService" /> -->
+<!-- 		<property name="exchangeRatesService" ref="exchangeRatesService" /> -->
+<!-- 		<property name="accountRuleOrganizationService" ref="accountRuleOrganizationService" /> -->
+<!-- 		<property name="organizationService" ref="organizationService" /> -->
+<!-- 		<property name="emailService" ref="emailService" /> -->
+<!-- 		<property name="organizationEventService" ref="organizationEventService" /> -->
+<!-- 		<property name="accountChangeService" ref="accountChangeService" /> -->
+<!-- 		<property name="smsCredentialService" ref="smsCredentialService" /> -->
+<!-- 		<property name="billerService" ref="billerService" /> -->
+<!-- 		<property name="addressService" ref="addressService" /> -->
+<!-- 		<property name="transactionTypeService" ref="transactionTypeService" /> -->
+<!-- 		<property name="organizationBankService" ref="organizationBankService" /> -->
+<!-- 		<property name="smsTemplateService" ref="smsTemplateService" /> -->
+<!-- 		<property name="recurringBillPoolService" ref="recurringBillPoolService" /> -->
+<!-- 		<property name="recurringBillPoolLinesService" ref="recurringBillPoolLinesService" /> -->
+<!-- 		<property name="currencyService" ref="currencyService" /> -->
+<!-- 		<property name="exchangeRatesTimelineService" ref="exchangeRatesTimelineService" /> -->
+<!-- 	</bean> -->
+	<!-- <bean id="loyaltyUtils" class="jatis.va.main.util.LoyaltyUtils" >
+		<property name="memberAccountService" ref="memberAccountService" />
+	</bean> -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="jsonConverter"
+		class="jatis.va.main.services.util.MappingJsonHttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json" />
+	</bean>
+
+</beans>

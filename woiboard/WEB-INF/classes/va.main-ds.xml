@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"
+		>
+
+	<!-- Local Settings -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean> 
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<bean id="persistenceExceptionTranslationPostProcessor"
+        class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+	
+	
+<!--     <tx:annotation-driven transaction-manager="transactionManager"/> -->
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<!-- <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"  /> -->
+		<property name="connectionTimeout" value="60000" />
+		<property name="dataSourceClassName" value="org.postgresql.ds.PGPoolingDataSource" />
+		<property name="maximumPoolSize" value="10" /><!-- 150 di prod,  50 di dev -->
+		<property name="maxLifetime" value="120000" />
+		<property name="idleTimeout" value="120000" />
+		<property name="leakDetectionThreshold" value="600000" />
+		<property name="dataSourceProperties">
+			<props>
+				<!-- <prop key="serverName">10.17.33.155</prop> -->
+<!-- 				<prop key="serverName">localhost</prop> -->
+				<prop key="serverName">10.10.0.208</prop>
+				<prop key="databaseName">fifpay_db</prop>
+				<!-- <prop key="user">payment</prop> -->
+				<prop key="user">postgres</prop>
+				<!-- <prop key="password">admin</prop> -->
+				<!-- <prop key="password">postgres</prop> -->
+				
+				<!--local -->
+<!-- 				<prop key="password">12345</prop> -->
+				<!--dev -->
+				<prop key="password">postgres2017!@#</prop>
+				<!--prod -->
+<!-- 				<prop key="password">payment!@#$</prop>  -->
+			</props>
+		</property>
+	</bean>
+
+	<!-- Local Settings -->
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="mappingLocations"
+			value="classpath*:jatis/va/core/domain/mapping/hibernate/*.hbm.xml" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.PostgreSQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">
+					false
+				</prop>
+				<prop key="hibernate.generate_statistics">
+					false
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">
+					update
+				</prop>
+	
+			</props>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!-- * * * * QUARTZ * * * * * -->
+
+<!-- 	<bean id="writeVaToBaPool" class="jatis.va.main.scheduler.WriteVaToBaPool"> -->
+<!-- 		<property name="vaToBaPoolDao" ref="vaToBaPoolDao" /> -->
+<!-- 	</bean> -->
+
+	<!-- <bean id="eventTransferPool" class="jatis.va.main.scheduler.CheckEventTransferPool">
+		<property name="organizationEventDao" ref="organizationEventDao" />
+		<property name="eventTransferPoolDao" ref="eventTransferPoolDao" />
+		<property name="transactionService" ref="transactionService" />
+		<property name="cashbackPoolDao" ref="cashbackPoolDao" />
+		<property name="systemParameterService" ref="systemParameterService" />
+		cek di svn
+		<property name="smsCredentialService" ref="smsCredentialService"></property>
+	</bean>
+	<bean id="balanceRecordCutOff" class="jatis.va.main.scheduler.BalanceRecord">
+		<property name="balanceRecordSummaryDao" ref="balanceRecordSummaryDao" />
+		<property name="balanceRecordDailyService" ref="balanceRecordDailyService" />
+		<property name="organizationDao" ref="organizationDao" />
+		<property name="eventTransferPoolDao" ref="eventTransferPoolDao" />
+		<property name="organizationBillerService" ref="organizationBillerService" />
+		<property name="agentService" ref="agentService" />
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+	</bean>
+	<bean id="orgBankCreateMember" class="jatis.va.main.scheduler.OrgBankCreateMember">
+		<property name="organizationBankDao" ref="organizationBankDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+	</bean>
+	<bean id="orgBankUpdateVa" class="jatis.va.main.scheduler.OrgBankUpdateVa">
+		<property name="organizationBankDao" ref="organizationBankDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+	</bean>
+	<bean id="orgBankRemoveMember" class="jatis.va.main.scheduler.RemoveOrgBankMember">
+		<property name="organizationBankDao" ref="organizationBankDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+	</bean>
+	<bean id="recurringBill" class="jatis.va.main.scheduler.RecurringBillDebt">
+		<property name="recurringBillPoolDao" ref="recurringBillPoolDao" />
+		<property name="recurringBillPoolLinesDao" ref="recurringBillPoolLinesDao" />
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="emailService" ref="emailService" />
+		<property name="agentService" ref="agentService" />
+		<property name="memberAccountService" ref="memberAccountService" />
+		<property name="membershipService" ref="membershipService" />
+		<property name="pdsProcessor">
+			<bean class="jatis.va.main.services.processor.PdsProcessorImpl">
+				<property name="transactionService" ref="transactionService" />
+				<property name="membershipService" ref="membershipService" />
+				<property name="memberAccountService" ref="memberAccountService" />
+				<property name="bankService" ref="bankService" />
+				<property name="agentService" ref="agentService" />
+				<property name="agentAccountService" ref="agentAccountService" />
+				<property name="userPasswordGenerator" ref="userPasswordGenerator" />
+				<property name="systemParameterService" ref="systemParameterService" />
+				<property name="peopleService" ref="peopleService" />
+				<property name="transactionHeaderService" ref="transactionHeaderService" />
+				<property name="registrationService" ref="registrationService" />
+				<property name="merchantService" ref="merchantService" />
+				<property name="accountTypeService" ref="accountTypeService" />
+				<property name="organizationMemberService" ref="organizationMemberService" />
+				<property name="organizationAgentService" ref="organizationAgentService" />
+				<property name="workingDaysLineService" ref="workingDaysLineService" />
+				<property name="feeChargesService" ref="feeChargesService" />
+				<property name="lookupService" ref="lookupService" />
+				<property name="exchangeRatesService" ref="exchangeRatesService" />
+				<property name="accountRuleOrganizationService" ref="accountRuleOrganizationService" />
+				<property name="organizationService" ref="organizationService" />
+				<property name="emailService" ref="emailService" />
+				<property name="organizationEventService" ref="organizationEventService" />
+				<property name="accountChangeService" ref="accountChangeService" />
+				<property name="smsCredentialService" ref="smsCredentialService" />
+				<property name="billerService" ref="billerService" />
+				<property name="addressService" ref="addressService" />
+				<property name="transactionTypeService" ref="transactionTypeService" />
+				<property name="organizationBankService" ref="organizationBankService" />
+				<property name="smsTemplateService" ref="smsTemplateService" />
+				<property name="recurringBillPoolService" ref="recurringBillPoolService" />
+			</bean>
+		</property>
+	</bean> -->
+	<!-- Spring Quartz -->
+
+	<!-- <bean name="runWriteVaToBaPool"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="jatis.va.main.scheduler.RunWriteVaToBaPool" />
+		<property name="durability" value="true" />
+	</bean> -->
+
+	<!-- <bean name="runEventTransferPool" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"> 
+		<property name="jobClass" value="jatis.va.main.scheduler.RunEventTransferPool" 
+		/> <property name="durability" value="true" /> </bean> -->
+
+<!-- 	<bean name="runBalanceRecord"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="jatis.va.main.scheduler.RunBalanceRecord" />
+		<property name="durability" value="true" />
+	</bean>
+
+	<bean name="runOrgBankCreateMember"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass"
+			value="jatis.va.main.scheduler.RunOrgBankCreateMember" />
+		<property name="durability" value="true" />
+	</bean>
+
+
+	<bean name="runOrgBankUpdateVa"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="jatis.va.main.scheduler.RunOrgBankUpdateVa" />
+		<property name="durability" value="true" />
+	</bean>
+
+	<bean name="runOrgBankRemoveMember"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass"
+			value="jatis.va.main.scheduler.RunRemoveOrgBankMember" />
+		<property name="durability" value="true" />
+	</bean> -->
+
+	<!-- <bean id="cronWriteVaToBaPool"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="runWriteVaToBaPool" />
+		<property name="cronExpression" value="0 0 0 * * ?" />  -->
+		<!-- Every midnight -->
+		<!-- <property name="cronExpression" value="0 0 7 ? 1/1 WED#1 *" /> Every 
+			1st Wednesday at 7 AM -->
+		<!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> Every 
+			1 minutes -->
+		<!-- <property name="cronExpression" value="*/15 * * * * ?" /> Every 15 
+			seconds -->
+<!-- 	</bean> -->
+	<!-- <bean id="cronEventTransferPool" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> 
+		<property name="jobDetail" ref="runEventTransferPool" /> <property name="cronExpression" 
+		value="0 0 0 * * ?" /> Every midnight <property name="cronExpression" value="*/15 
+		* * * * ?" /> Every 15 seconds </bean> -->
+<!-- 	<bean id="cronBalanceRecord" -->
+<!-- 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
+<!-- 		<property name="jobDetail" ref="runBalanceRecord" /> -->
+<!-- 		<property name="cronExpression" value="0 59 23 * * ?" /> -->
+		<!-- Every 
+			end of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> --> <!-- Every 1 minutes -->
+		<!-- <property name="cronExpression" value="0 */3 * * * ?" /> --><!-- Every 5 minutes -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="cronOrgBankRecord" -->
+<!-- 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
+<!-- 		<property name="jobDetail" ref="runOrgBankCreateMember" /> -->
+<!-- 		<property name="cronExpression" value="0 59 23 * * ?" /> -->
+		<!-- Every 	end of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> --> <!-- Every 1 minutes -->
+		<!-- <property name="cronExpression" value="0 */5 * * * ?" /> --><!-- Every 5 minutes -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="cronOrgBankUpdateVa" -->
+<!-- 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
+<!-- 		<property name="jobDetail" ref="runOrgBankUpdateVa" /> -->
+<!-- 		<property name="cronExpression" value="0 59 23 * * ?" /> -->
+		 <!-- Every end of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> --> <!-- Every 1 minutes -->
+		<!-- <property name="cronExpression" value="0 */5 * * * ?" /> --> <!-- Every 5 minutes -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="cronOrgBankRemove" -->
+<!-- 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> -->
+<!-- 		<property name="jobDetail" ref="runOrgBankRemoveMember" /> -->
+<!-- 		<property name="cronExpression" value="0 59 23 * * ?" /> -->
+		 <!-- Every end of day 23:59 -->
+		<!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> --> <!-- Every 1 minutes -->
+		<!-- <property name="cronExpression" value="0 */7 * * * ?" /> --> <!-- Every 5 minutes -->
+<!-- 	</bean> -->
+
+<!-- 	 original Quartz  -->
+
+<!-- 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> -->
+<!-- 		<property name="autoStartup" value="true" /> -->
+<!-- 		<property name="applicationContextSchedulerContextKey" value="applicationContext" /> -->
+<!-- 		<property name="waitForJobsToCompleteOnShutdown" value="true" /> -->
+<!-- 		<property name="overwriteExistingJobs" value="true" /> -->
+<!-- 		<property name="dataSource"> -->
+<!-- 			<ref bean="dataSource" /> -->
+<!-- 		</property> -->
+<!-- 		<property name="transactionManager"> -->
+<!-- 			<ref bean="transactionManager" /> -->
+<!-- 		</property> -->
+<!-- 		<property name="schedulerContextAsMap"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="writeVaToBaPool" value-ref="writeVaToBaPool" /> -->
+<!-- 				<entry key="eventTransferPool" value-ref="eventTransferPool" /> -->
+<!-- 				<entry key="balanceRecordCutOff" value-ref="balanceRecordCutOff" /> -->
+<!-- 				<entry key="recurringBill" value-ref="recurringBill" /> -->
+<!-- 				<entry key="orgBankCreateMember" value-ref="orgBankCreateMember" /> -->
+<!-- 				<entry key="orgBankRemoveMember" value-ref="orgBankRemoveMember" /> -->
+<!-- 				<entry key="orgBankUpdateVa" value-ref="orgBankUpdateVa" /> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
+<!-- 		<property name="quartzProperties"> -->
+<!-- 			<props> -->
+<!-- 				<prop key="org.quartz.jobStore.misfireThreshold">6000000</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.PostgreSQLDelegate -->
+<!-- 				</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.isClustered">true</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.clusterCheckinInterval">20000</prop> -->
+<!-- 				<prop key="org.quartz.scheduler.instanceName">ClusteredScheduler</prop> -->
+<!-- 				<prop key="org.quartz.scheduler.instanceId">AUTO</prop> -->
+<!-- 				<prop key="org.quartz.scheduler.jmx.export">true</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.isClustered">false</prop> -->
+<!-- 				<prop key="org.quartz.jobStore.clusterCheckinInterval">20000</prop> -->
+<!-- 			</props> -->
+<!-- 		</property> -->
+<!-- 		<property name="triggers"> -->
+<!-- 			<list> -->
+<!-- 				<ref bean="cronWriteVaToBaPool" /> -->
+<!-- 				<ref bean="cronEventTransferPool" /> -->
+<!-- 				<ref bean="cronBalanceRecord" /> -->
+<!-- 				<ref bean="cronOrgBankRecord" /> -->
+<!-- 				<ref bean="cronOrgBankRemove" /> -->
+<!-- 				<ref bean="cronOrgBankUpdateVa" /> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	
+	
+<!-- 	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"> -->
+<!-- 		<property name="brokerURL" value="tcp://localhost:61616" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="messageDestination" class="org.apache.activemq.command.ActiveMQQueue"> -->
+<!-- 		<constructor-arg value="messageQueue1" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"> -->
+<!-- 		<property name="connectionFactory" ref="connectionFactory" /> -->
+<!-- 		<property name="receiveTimeout" value="10000" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="jmsProducer" class="jms.JmsProducer"> -->
+<!-- 		<property name="destination" ref="messageDestination" /> -->
+<!-- 		<property name="jmsTemplate" ref="jmsTemplate" /> -->
+<!-- 	</bean> -->
+	
+	<bean id="bankService" class="jatis.va.core.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+<!-- 	<bean id="jmsProducer" class="jms.JmsProducer"> -->
+<!-- 		<property name="destination" ref="messageDestination" /> -->
+<!-- 		<property name="jmsTemplate" ref="jmsTemplate" /> -->
+<!-- 	</bean> -->
+	
+
+</beans>

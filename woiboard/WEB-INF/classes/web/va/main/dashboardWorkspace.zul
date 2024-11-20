@@ -1,0 +1,129 @@
+<?page title="Virtual Account Application" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window border="none" id="dashoboardWindow"
+		apply="jatis.va.main.controller.DashboardWorkspaceComposer">
+
+		<panel title="${c:l('va.common.workspace')}"
+			style="margin-bottom:10px" border="normal" id="errorPanel"
+			visible="false">
+			<panelchildren>
+				<separator />
+				<label id="errCommonError"
+					style="color:red;font-style:italic">
+				</label>
+				<separator />
+			</panelchildren>
+		</panel>
+
+		<borderlayout height="670px" width="100%" id="workspaceLayout">
+
+			<west width="250px;" flex="true" maxsize="250"
+				splittable="true" collapsible="true" border="0" top="-40px;">
+				<panel border="0" title="Module"
+					style="margin-top: -35px;">
+					<panelchildren style="overflow:auto;">
+						<vbox
+							style="margin-left: 15px; margin-top: 25px; margin-right: 20px;"
+							id="moduleMenu">
+						</vbox>
+						
+						<separator />
+					</panelchildren>
+				</panel>
+			</west>
+			<center border="0">
+				<borderlayout>
+					<!-- 						style="background-color: #0E6097;" -->
+					<north height="100px" border="0">
+						<borderlayout>
+							<west border="0">
+								<vbox>
+									<hbox height="3px"></hbox>
+									<hbox height="15px">
+										<label value="    " />
+										<label value="    " />
+										<label value="    " />
+										<label value="    " />
+										<label id="lblbalance"
+											style="color: black; font-size: 14px; font-weight: bold;" />
+										  
+									</hbox>
+									<hbox height="12" width="100%">
+										<label value="    " />
+										<label value="    " />
+										<label value="    " />
+										<label value="    " />
+										<label id="lbUserLogin"
+											style="color: black;float:right;" />
+									</hbox>
+                                    <hbox height="12" width="100%">
+                                        <label value="    " />
+                                        <label value="    " />
+                                        <label value="    " />
+                                        <label value="    " />
+                                        <label id="lbUserAssignment"
+                                           style="color: black;float:right;font-weight: bold;" />
+                                    </hbox>
+
+									<hbox height="12" width="100%">
+										<label value="    " />
+										<label value="    " />
+										<label value="    " />
+										<label value="    " />
+										<label id="lbFunctionGroup"
+											   style="color: black;float:right;font-weight: bold;" />
+									</hbox>
+								</vbox>
+							</west>
+							<center border="0"></center>
+							<east border="0" width="10%">
+								<vbox align="center" >
+									<hbox height="10px"></hbox>
+									<hbox height="25px" align="center" pack="start">	
+									<label value="    " />
+										
+										<label value="Logout   " />																	   
+										<button  image="~./va/images/logout.png" id="logout" style=" background-color: Transparent;
+										  background-repeat:no-repeat;
+										  tooltip :'LOGOUT';
+										  border: none;
+										  cursor:pointer;
+										  overflow: hidden;
+										  outline:none;
+										  align:right;"/>
+									</hbox>
+
+								</vbox>
+							</east>
+						</borderlayout>
+						
+					</north>
+					<center border="0">
+						<tabbox id="tb" height="100%"
+							style="margin-top: 5px; margin-left: 5px; overflow:auto;">
+							<tabs id="tabs">
+								<tab id="moduleTab"
+									label="Module Properties" style="margin-right: 5px;" />
+							</tabs>
+							<tabpanels id="tabPanels">
+								<tabpanel>
+									<panel border="none"
+										height="100%">
+										<panelchildren
+											id="modulePanel">
+										</panelchildren>
+									</panel>
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+					</center>
+				</borderlayout>
+
+
+			</center>
+		</borderlayout>
+
+	</window>
+</zk>

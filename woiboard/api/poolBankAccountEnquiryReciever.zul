@@ -1,0 +1,23 @@
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<label id="output" />
+	<zscript>
+		<![CDATA[
+			import jatis.va.core.integration.service.BankIntegrationService;
+			import jatis.va.core.service.exception.BusinessException;
+			import org.zkoss.zkplus.spring.SpringUtil;
+
+			BankIntegrationService bankIntegrationService = (BankIntegrationService) SpringUtil.getBean("bankIntegrationService");
+
+			String organizationCode = execution.getParameter("organizationCode");
+			int bankCode = Integer.parseInt(execution.getParameter("bankCode"));
+
+			try {
+				String returnData = bankIntegrationService.getPoolBankAccountBySelectedCo(organizationCode, bankCode);
+				output.setValue(returnData);
+			} catch (BusinessException e) {
+				output.setValue(e.getMessage());
+			}
+		]]>
+	</zscript>
+</zk>

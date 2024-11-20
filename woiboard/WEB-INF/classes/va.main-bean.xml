@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		">
+
+	<bean id="moduleExtenderManager" class="jatis.va.main.module.ModuleExtenderManager"
+		autowire="byType">
+	</bean>
+	
+<!--     <bean id="testServiceBean" class="jatis.va.core.service.impl.TestServiceImpl"> -->
+<!-- 	</bean> -->
+	
+	<!-- audit trail <bean id="hibernateSessionFactoryHelper" class="jatis.va.core.util.audit.HibernateSessionFactoryHelper" 
+		/> <bean id="auditInterceptor" class="jatis.va.core.util.audit.AuditInterceptor"/> 
+		<bean id="auditExecutor" class="jatis.va.core.util.audit.AuditExecutorImpl"> 
+		<property name="ds" ref="dataSource"></property> </bean> <bean id="auditViewService" 
+		class="jatis.va.core.util.audit.AuditViewServiceImpl"> </bean> <bean id="userAccessRecordService" 
+		class="jatis.va.core.util.audit.UserAccessRecordServiceImpl"> </bean> audit 
+		mapping <bean id="auditMappingTransactionType" class="jatis.va.core.domain.audit.mapping.TransactionTypeAuditMapping"/> -->
+
+	<!-- DAO START -->
+	<!-- <bean id="holidayDao" class="jatis.va.core.dao.hibernate.HolidayDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="lookupDao" class="jatis.va.core.dao.hibernate.LookupDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="menuDao" class="jatis.va.core.dao.hibernate.MenuDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="sequenceDao" class="jatis.va.core.dao.hibernate.SequenceDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="transactionTypeDao" class="jatis.va.core.dao.hibernate.TransactionTypeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="exchangeRatesDao" class="jatis.va.core.dao.hibernate.ExchangeRatesDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="feeRateTypeDao" class="jatis.va.core.dao.hibernate.FeeRateTypeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationDao" class="jatis.va.core.dao.hibernate.OrganizationDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="transactionFeeDao" class="jatis.va.core.dao.hibernate.TransactionFeeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="transactionFeeOrganizationDao"
+		class="jatis.va.core.dao.hibernate.TransactionFeeOrganizationDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="addressDao" class="jatis.va.core.dao.hibernate.AddressDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="contactDao" class="jatis.va.core.dao.hibernate.ContactDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="workingDaysLineDao" class="jatis.va.core.dao.hibernate.WorkingDaysLineDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="userDao" class="jatis.va.core.dao.hibernate.UserDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="membershipDao" class="jatis.va.core.dao.hibernate.MembershipDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="peopleDao" class="jatis.va.core.dao.hibernate.PeopleDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="feeChargesDao" class="jatis.va.core.dao.hibernate.FeeChargesDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="functionDao" class="jatis.va.core.dao.hibernate.FunctionDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="functionGroupDao" class="jatis.va.core.dao.hibernate.FunctionGroupDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationBankDao"
+		class="jatis.va.core.dao.hibernate.OrganizationBankDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="accountRuleDao" class="jatis.va.core.dao.hibernate.AccountRuleDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="masterRuleDao" class="jatis.va.core.dao.hibernate.MasterRuleDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="bankDao" class="jatis.va.core.dao.hibernate.BankDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="bankBranchDao" class="jatis.va.core.dao.hibernate.BankBranchDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="memberAccountDao" class="jatis.va.core.dao.hibernate.MemberAccountDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationMemberDao"
+		class="jatis.va.core.dao.hibernate.OrganizationMemberDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="membershipDao" ref="membershipDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+	</bean>
+	<bean id="bankApiDao" class="jatis.va.core.dao.hibernate.BankApiDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="accountRuleOrganizationDao"
+		class="jatis.va.core.dao.hibernate.AccountRuleOrganizationDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="transactionLineDao" class="jatis.va.core.dao.hibernate.TransactionLineDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="transactionHeaderDao"
+		class="jatis.va.core.dao.hibernate.TransactionHeaderDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="accountBalanceDao" class="jatis.va.core.dao.hibernate.AccountBalanceDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="merchantDao" class="jatis.va.core.dao.hibernate.MerchantDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="countryDao" class="jatis.va.core.dao.hibernate.CountryDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="provinceDao" class="jatis.va.core.dao.hibernate.ProvinceDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="cityDao" class="jatis.va.core.dao.hibernate.CityDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="systemParameterDao" class="jatis.va.core.dao.hibernate.SystemParameterDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="caterOtherTransactionDao"
+		class="jatis.va.core.dao.hibernate.CaterOtherTransactionDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="agentDao" class="jatis.va.core.dao.hibernate.AgentDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="agentAccountDao" class="jatis.va.core.dao.hibernate.AgentAccountDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationAgentDao"
+		class="jatis.va.core.dao.hibernate.OrganizationAgentDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="storeDao" class="jatis.va.core.dao.hibernate.StoreDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="pdsCardDao" class="jatis.va.core.dao.hibernate.PdsCardDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="terminalDao" class="jatis.va.core.dao.hibernate.TerminalDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="accountTypeDao" class="jatis.va.core.dao.hibernate.AccountTypeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="vaToBaPoolDao" class="jatis.va.core.dao.hibernate.VaToBaPoolDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="notificationTransactionTypeDao"
+		class="jatis.va.core.dao.hibernate.NotficationTransactionTypeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationEventDao"
+		class="jatis.va.core.dao.hibernate.OrganizationEventDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="eventTransferPoolDao"
+		class="jatis.va.core.dao.hibernate.EventTransferPoolDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="accountChangeDao" class="jatis.va.core.dao.hibernate.AccountChangeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="refundRulesDao" class="jatis.va.core.dao.hibernate.RefundRulesDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="destinationTypeDao" class="jatis.va.core.dao.hibernate.DestinationTypeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="smsCredentialDao" class="jatis.va.core.dao.hibernate.SmsCredentialDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="billerDao" class="jatis.va.core.dao.hibernate.BillerDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="providerDao" class="jatis.va.core.dao.hibernate.ProviderDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="billerTypeDao" class="jatis.va.core.dao.hibernate.BillerTypeDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationBillerDao"
+		class="jatis.va.core.dao.hibernate.OrganizationBillerDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="organizationProviderDao"
+		class="jatis.va.core.dao.hibernate.OrganizationProviderDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="balanceRecordSummaryDao"
+		class="jatis.va.core.dao.hibernate.BalanceRecordSummaryDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="disbursementPoolDao"
+		class="jatis.va.core.dao.hibernate.DisbursementPoolDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="cashbackPoolDao" class="jatis.va.core.dao.hibernate.CashbackPoolDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="smsTemplateDao" class="jatis.va.core.dao.hibernate.SmsTemplateDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="recurringBillPoolDao"
+		class="jatis.va.core.dao.hibernate.RecurringBillPoolDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="recurringBillPoolLinesDao"
+		class="jatis.va.core.dao.hibernate.RecurringBillPoolLinesDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="currencyDao" class="jatis.va.core.dao.hibernate.CurrencyDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="smsLogDao" class="jatis.va.core.dao.hibernate.SmsLogDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="deductionLogDao" class="jatis.va.core.dao.hibernate.DeductionLogDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="activityDao" class="jatis.va.core.dao.hibernate.ActivityDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="exchangeRatesTimelineDao"
+		class="jatis.va.core.dao.hibernate.ExchangeRatesTimelineDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="balanceRecordDailyDao"
+		class="jatis.va.core.dao.hibernate.BalanceRecordDailyDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="errorLogDao" class="jatis.va.core.dao.hibernate.ErrorLogDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="regionDao" class="jatis.va.core.dao.hibernate.RegionDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="membershipBankDao" class="jatis.va.core.dao.hibernate.MembershipBankDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean> -->
+	<!-- DAO END -->
+
+	<!-- SERVICES START -->
+	<!-- <bean id="smsTemplateService" class="jatis.va.core.service.impl.SmsTemplateServiceImpl">
+		<property name="smsTemplateDao" ref="smsTemplateDao" />
+	</bean>
+	<bean id="pdsCardService" class="jatis.va.core.service.impl.PdsCardServiceImpl">
+		<property name="pdsCardDao" ref="pdsCardDao" />
+	</bean>
+
+	<bean id="holidayService" class="jatis.va.core.service.impl.HolidayServiceImpl">
+		<property name="holidayDao" ref="holidayDao" />
+	</bean>
+	<bean id="lookupService" class="jatis.va.core.service.impl.LookupServiceImpl">
+		<property name="lookupDao" ref="lookupDao" />
+	</bean>
+	<bean id="menuService"
+		class="jatis.va.admin.systemsettingmanagement.service.impl.MenuServiceImpl">
+		<property name="menuDao" ref="menuDao" />
+	</bean>
+	<bean id="sequenceService" class="jatis.va.core.service.impl.SequenceServiceImpl">
+		<property name="sequenceDao" ref="sequenceDao" />
+	</bean>
+	<bean id="transactionTypeService" class="jatis.va.core.service.impl.TransactionTypeServiceImpl">
+		<property name="transactionTypeDao" ref="transactionTypeDao" />
+	</bean>
+	<bean id="exchangeRatesService" class="jatis.va.core.service.impl.ExchangeRatesServiceImpl">
+		<property name="exchangeRatesDao" ref="exchangeRatesDao" />
+	</bean>
+	<bean id="feeRateTypeService" class="jatis.va.core.service.impl.FeeRateTypeServiceImpl">
+		<property name="feeRateTypeDao" ref="feeRateTypeDao" />
+	</bean>
+	<bean id="organizationService" class="jatis.va.core.service.impl.OrganizationServiceImpl">
+		<property name="organizationDao" ref="organizationDao" />
+		<property name="accountRuleOrganizationDao" ref="accountRuleOrganizationDao" />
+		<property name="userDao" ref="userDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="organizationBankDao" ref="organizationBankDao" />
+		<property name="accountBalanceDao" ref="accountBalanceDao" />
+		<property name="agentDao" ref="agentDao" />
+	</bean>
+	<bean id="transactionFeeService" class="jatis.va.core.service.impl.TransactionFeeServiceImpl">
+		<property name="transactionFeeDao" ref="transactionFeeDao" />
+	</bean>
+	<bean id="transactionFeeOrganizationService"
+		class="jatis.va.core.service.impl.TransactionFeeOrganizationServiceImpl">
+		<property name="transactionFeeOrganizationDao" ref="transactionFeeOrganizationDao" />
+	</bean>
+	<bean id="addressService" class="jatis.va.core.service.impl.AddressServiceImpl">
+		<property name="addressDao" ref="addressDao" />
+	</bean>
+	<bean id="contactService" class="jatis.va.coregistration.service.impl.ContactServiceImpl">
+		<property name="contactDao" ref="contactDao" />
+	</bean>
+	<bean id="workingDaysLineService" class="jatis.va.core.service.impl.WorkingDaysLineServiceImpl">
+		<property name="workingDaysLineDao" ref="workingDaysLineDao" />
+	</bean>
+	<bean id="userService" class="jatis.va.core.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	<bean id="membershipService" class="jatis.va.core.service.impl.MembershipServiceImpl">
+		<property name="membershipDao" ref="membershipDao" />
+	</bean>
+	<bean id="peopleService" class="jatis.va.core.service.impl.PeopleServiceImpl">
+		<property name="peopleDao" ref="peopleDao" />
+	</bean>
+	<bean id="feeChargesService" class="jatis.va.core.service.impl.FeeChargesServiceImpl">
+		<property name="feeChargesDao" ref="feeChargesDao" />
+	</bean>
+	<bean id="functionService" class="jatis.va.core.service.impl.FunctionServiceImpl">
+		<property name="functionDao" ref="functionDao" />
+	</bean>
+	<bean id="functionGroupService" class="jatis.va.core.service.impl.FunctionGroupServiceImpl">
+		<property name="functionDao" ref="functionDao" />
+		<property name="functionGroupDao" ref="functionGroupDao" />
+	</bean>
+	<bean id="organizationBankService" class="jatis.va.core.service.impl.OrganizationBankServiceImpl">
+		<property name="organizationBankDao" ref="organizationBankDao" />
+	</bean>
+	<bean id="accountRuleService" class="jatis.va.core.service.impl.AccountRuleServiceImpl">
+		<property name="accountRuleDao" ref="accountRuleDao" />
+	</bean>
+	<bean id="masterRuleService"
+		class="jatis.va.admin.systemsettingmanagement.service.impl.MasterRuleServiceImpl">
+		<property name="masterRuleDao" ref="masterRuleDao" />
+	</bean>
+	<bean id="bankService" class="jatis.va.core.service.impl.BankServiceImpl">
+		<property name="bankDao" ref="bankDao" />
+	</bean>
+	<bean id="bankBranchService" class="jatis.va.core.service.impl.BankBranchServiceImpl">
+		<property name="bankBranchDao" ref="bankBranchDao" />
+	</bean>
+	<bean id="memberAccountService" class="jatis.va.core.service.impl.MemberAccountServiceImpl">
+		<property name="memberAccountDao" ref="memberAccountDao" />
+		<property name="membershipDao" ref="membershipDao" />
+	</bean>
+	<bean id="organizationMemberService"
+		class="jatis.va.core.service.impl.OrganizationMemberServiceImpl">
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+
+	</bean>
+	<bean id="bankApiService"
+		class="jatis.va.admin.systemsettingmanagement.service.impl.BankApiServiceImpl">
+		<property name="bankApiDao" ref="bankApiDao" />
+	</bean>
+	<bean id="accountRuleOrganizationService"
+		class="jatis.va.core.service.impl.AccountRuleOrganizationServiceImpl">
+		<property name="accountRuleOrganizationDao" ref="accountRuleOrganizationDao" />
+	</bean>
+	<bean id="transactionLineService" class="jatis.va.core.service.impl.TransactionLineServiceImpl">
+		<property name="transactionLineDao" ref="transactionLineDao" />
+	</bean>
+	<bean id="transactionHeaderService" class="jatis.va.core.service.impl.TransactionHeaderServiceImpl">
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+	</bean>
+	<bean id="accountBalanceService" class="jatis.va.core.service.impl.AccountBalanceServiceImpl">
+		<property name="accountBalanceDao" ref="accountBalanceDao" />
+	</bean>
+	<bean id="bankIntegrationService"
+		class="jatis.va.core.integration.service.impl.BankIntegrationServiceImpl">
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="organizationBankDao" ref="organizationBankDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+		<property name="organizationDao" ref="organizationDao" />
+		<property name="feeChargesDao" ref="feeChargesDao" />
+	</bean>
+	<bean id="merchantIntegrationService"
+		class="jatis.va.core.integration.service.impl.MerchantIntegrationServiceImpl">
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+		<property name="merchantDao" ref="merchantDao" />
+		<property name="lookupDao" ref="lookupDao" />
+		<property name="systemParameterDao" ref="systemParameterDao" />
+	</bean>
+	
+	<bean id="transactionService" class="jatis.va.core.service.impl.TransactionServiceImpl">
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="organizationBillerDao" ref="organizationBillerDao" />
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+		<property name="organizationBankDao" ref="organizationBankDao" />
+		<property name="merchantDao" ref="merchantDao" />
+		<property name="bankIntegrationService" ref="bankIntegrationService" />
+		<property name="organizationBillerService" ref="organizationBillerService" />
+		<property name="organizationService" ref="organizationService" />
+		<property name="merchantIntegrationService" ref="merchantIntegrationService" />
+		<property name="systemParameterDao" ref="systemParameterDao" />
+		<property name="terminalDao" ref="terminalDao" />
+		<property name="vaToBaPoolDao" ref="vaToBaPoolDao" />
+		<property name="agentDao" ref="agentDao" />
+		<property name="organizationDao" ref="organizationDao" />
+		<property name="agentAccountDao" ref="agentAccountDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+		<property name="eventTransferPoolDao" ref="eventTransferPoolDao" />
+		<property name="disbursementPoolDao" ref="disbursementPoolDao" />
+		<property name="cashbackPoolDao" ref="cashbackPoolDao" />
+		<property name="feeChargesDao" ref="feeChargesDao" />
+		<property name="bankDao" ref="bankDao" />
+		<property name="recurringBillPoolDao" ref="recurringBillPoolDao" />
+		<property name="recurringBillPoolLinesDao" ref="recurringBillPoolLinesDao" />
+		<property name="billerDao" ref="billerDao" />
+		<property name="transactionLineDao" ref="transactionLineDao" />
+	</bean> -->
+	<!-- <bean id="transactionServiceFile" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="transactionServiceFile" />
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+   	</bean> -->
+	<!-- <bean id="registrationService" class="jatis.va.core.service.impl.RegistrationServiceImpl">
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="organizationDao" ref="organizationDao" />
+		<property name="membershipDao" ref="membershipDao" />
+		<property name="memberAccountDao" ref="memberAccountDao" />
+		<property name="functionGroupDao" ref="functionGroupDao" />
+		<property name="peopleDao" ref="peopleDao" />
+		<property name="merchantDao" ref="merchantDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="agentDao" ref="agentDao" />
+		<property name="storeDao" ref="storeDao" />
+		<property name="pdsCardDao" ref="pdsCardDao" />
+	</bean>
+	<bean id="merchantService" class="jatis.va.core.service.impl.MerchantServiceImpl">
+		<property name="merchantDao" ref="merchantDao" />
+		<property name="storeDao" ref="storeDao" />
+		<property name="agentDao" ref="agentDao" />
+		<property name="agentAccountDao" ref="agentAccountDao" />
+		<property name="billerDao" ref="billerDao" />
+	</bean>
+	<bean id="storeService" class="jatis.va.core.service.impl.StoreServiceImpl">
+		<property name="storeDao" ref="storeDao" />
+		<property name="agentDao" ref="agentDao" />
+		<property name="agentAccountDao" ref="agentAccountDao" />
+	</bean>
+	<bean id="terminalService" class="jatis.va.core.service.impl.TerminalServiceImpl">
+		<property name="terminalDao" ref="terminalDao" />
+	</bean>
+	<bean id="countryService" class="jatis.va.core.service.impl.CountryServiceImpl">
+		<property name="countryDao" ref="countryDao" />
+	</bean>
+	<bean id="provinceService" class="jatis.va.core.service.impl.ProvinceServiceImpl">
+		<property name="provinceDao" ref="provinceDao" />
+	</bean>
+	<bean id="cityService" class="jatis.va.core.service.impl.CityServiceImpl">
+		<property name="cityDao" ref="cityDao" />
+	</bean>
+	<bean id="systemParameterService" class="jatis.va.core.service.impl.SystemParameterServiceImpl">
+		<property name="systemParameterDao" ref="systemParameterDao" />
+	</bean>
+	<bean id="caterOtherTransactionService"
+		class="jatis.va.core.service.impl.CaterOtherTransactionServiceImpl">
+		<property name="caterOtherTransactionDao" ref="caterOtherTransactionDao" />
+		<property name="organizationBankDao" ref="organizationBankDao" />
+	</bean>
+	<bean id="agentService" class="jatis.va.core.service.impl.AgentServiceImpl">
+		<property name="agentDao" ref="agentDao" />
+	</bean>
+	<bean id="agentAccountService" class="jatis.va.core.service.impl.AgentAccountServiceImpl">
+		<property name="agentAccountDao" ref="agentAccountDao" />
+	</bean>
+	<bean id="organizationAgentService" class="jatis.va.core.service.impl.OrganizationAgentServiceImpl">
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+	</bean>
+	<bean id="emailService" class="jatis.va.core.service.impl.EmailServiceImpl">
+		<property name="javaMailSender" ref="javaMailSender" />
+		<property name="templateMessage" ref="templateMessage" />
+	</bean>
+	<bean id="reportService" class="jatis.va.core.service.impl.ReportServiceImpl">
+
+	</bean>
+	<bean id="accountTypeService" class="jatis.va.core.service.impl.AccountTypeServiceImpl">
+		<property name="accountTypeDao" ref="accountTypeDao" />
+	</bean>
+	<bean id="eventTransferPoolService" class="jatis.va.core.service.impl.EventTransferPoolServiceImpl">
+		<property name="eventTransferPoolDao" ref="eventTransferPoolDao" />
+	</bean>
+	<bean id="accountChangeService" class="jatis.va.core.service.impl.AccountChangeServiceImpl">
+		<property name="accountChangeDao" ref="accountChangeDao" />
+	</bean>
+	<bean id="refundRulesService" class="jatis.va.core.service.impl.RefundRulesServiceImpl">
+		<property name="refundRulesDao" ref="refundRulesDao" />
+	</bean>
+	<bean id="destinationTypeService" class="jatis.va.core.service.impl.DestinationTypeServiceImpl">
+		<property name="destinationTypeDao" ref="destinationTypeDao" />
+	</bean>
+	<bean id="smsCredentialService" class="jatis.va.core.service.impl.SmsCredentialServiceImpl">
+		<property name="smsCredentialDao" ref="smsCredentialDao" />
+	</bean>
+	<bean id="billerService" class="jatis.va.core.service.impl.BillerServiceImpl">
+		<property name="billerDao" ref="billerDao" />
+		<property name="agentDao" ref="agentDao" />
+		<property name="agentAccountDao" ref="agentAccountDao" />
+		<property name="organizationBillerDao" ref="organizationBillerDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="accountBalanceDao" ref="accountBalanceDao" />
+	</bean>
+	<bean id="billerTypeService" class="jatis.va.core.service.impl.BillerTypeManagerImpl">
+		<property name="billerTypeDao" ref="billerTypeDao" />
+	</bean>
+	<bean id="organizationBillerService"
+		class="jatis.va.core.service.impl.OrganizationBillerServiceImpl">
+		<property name="organizationBillerDao" ref="organizationBillerDao" />
+		<property name="agentDao" ref="agentDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+	</bean>
+	<bean id="organizationProviderService"
+		class="jatis.va.core.service.impl.OrganizationProviderServiceImpl">
+		<property name="organizationProviderDao" ref="organizationProviderDao" />
+	</bean>
+	<bean id="providerService"
+		class="jatis.va.core.service.impl.ProviderServiceImpl">
+		<property name="providerDao" ref="providerDao" />
+	</bean>
+	<bean id="transactionBillerService" class="jatis.va.core.service.impl.TransactionBillerServiceImpl">
+		<property name="organizationBillerDao" ref="organizationBillerDao" />
+		<property name="transactionHeaderDao" ref="transactionHeaderDao" />
+		<property name="organizationMemberDao" ref="organizationMemberDao" />
+		<property name="organizationAgentDao" ref="organizationAgentDao" />
+		<property name="agentDao" ref="agentDao" />
+	</bean>
+	<bean id="balanceRecordSummaryService"
+		class="jatis.va.core.service.impl.BalanceRecordSummaryServiceImpl">
+		<property name="balanceRecordSummaryDao" ref="balanceRecordSummaryDao" />
+	</bean>
+	<bean id="disbursementPoolService" class="jatis.va.core.service.impl.DisbursementPoolServiceImpl">
+		<property name="disbursementPoolDao" ref="disbursementPoolDao" />
+	</bean>
+	<bean id="recurringBillPoolService" class="jatis.va.core.service.impl.RecurringBillPoolServiceImpl">
+		<property name="recurringBillPoolDao" ref="recurringBillPoolDao" />
+		<property name="recurringBillPoolLinesDao" ref="recurringBillPoolLinesDao" />
+	</bean>
+	<bean id="recurringBillPoolLinesService"
+		class="jatis.va.core.service.impl.RecurringBillPoolLinesServiceImpl">
+		<property name="recurringBillPoolLinesDao" ref="recurringBillPoolLinesDao" />
+	</bean>
+	<bean id="currencyService" class="jatis.va.core.service.impl.CurrencyServiceImpl">
+		<property name="currencyDao" ref="currencyDao" />
+	</bean>
+	<bean id="smsLogService" class="jatis.va.core.service.impl.SmsLogServiceImpl">
+		<property name="smsLogDao" ref="smsLogDao" />
+	</bean>
+	<bean id="activityService" class="jatis.va.core.service.impl.ActivityServiceImpl">
+		<property name="activityDao" ref="activityDao" />
+	</bean>
+	<bean id="deductionLogService" class="jatis.va.core.service.impl.DeductionLogServiceImpl">
+		<property name="deductionLogDao" ref="deductionLogDao" />
+	</bean>
+	<bean id="exchangeRatesTimelineService"
+		class="jatis.va.core.service.impl.ExchangeRatesTimelineServiceImpl">
+		<property name="exchangeRatesTimelineDao" ref="exchangeRatesTimelineDao" />
+	</bean>
+	<bean id="balanceRecordDailyService"
+		class="jatis.va.core.service.impl.BalanceRecordDailyServiceImpl">
+		<property name="balanceRecordDailyDao" ref="balanceRecordDailyDao" />
+	</bean>
+	<bean id="regionService"
+		class="jatis.va.core.service.impl.RegionServiceImpl">
+		<property name="regionDao" ref="regionDao" />
+	</bean>
+	<bean id="membershipBankService"
+		class="jatis.va.core.service.impl.MembershipBankServiceImpl">
+		<property name="membershipBankDao" ref="membershipBankDao" />
+	</bean> -->
+	<!-- SERVICES END -->
+
+	<!-- EMAIL -->
+	<!-- <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> -->
+		<!-- <property name="host" value="192.168.128.33" /> -->
+		<!-- <property name="port" value="25" /> -->
+		<!-- <property name="username" value="jatisusr" /> -->
+		<!-- <property name="password" value="pa$$w0rd!@#$" /> -->
+		<!-- <property name="javaMailProperties"> -->
+		<!-- <props> -->
+		<!-- <prop key="mail.smtp.auth">true</prop> -->
+		<!-- <prop key="mail.smtp.starttls.enable">true</prop> -->
+		<!-- </props> -->
+		<!-- </property> -->
+
+	<!-- 	<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" /> -->
+		<!-- <property name="username" value="jatistnt@gmail.com" /> -->
+		<!-- <property name="password" value="jatistnt2013" /> -->
+
+		<!-- <property name="host" value="mail-id.jatis.com" /> -->
+		<!-- <property name="port" value="25" /> -->
+		<!-- <property name="username" value="@jatis.com" /> -->
+		<!-- <property name="password" value="solutions14" /> -->
+
+		<!-- <property name="username" value="b.ekiprabowo@gmail.com" /> -->
+		<!-- <property name="password" value="SupermenIsDet1992" /> -->
+		<!-- <property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean> -->
+
+	<!-- this is a template message that we can pre-load with default state -->
+<!-- 	<bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="from" value="customerservice@jatis.com" />
+	</bean> -->
+	<!-- EMAIL END -->
+
+	<!-- <bean id="vaToBaPoolService" class="jatis.va.core.service.impl.VaToBaPoolServiceImpl">
+		<property name="vaToBaPoolDao" ref="vaToBaPoolDao" />
+	</bean>
+	<bean id="notificationTransactionTypeService"
+		class="jatis.va.core.service.impl.NotificationTransactionTypeServiceImpl">
+		<property name="notificationTransactionTypeDao" ref="notificationTransactionTypeDao" />
+	</bean>
+	<bean id="organizationEventService" class="jatis.va.core.service.impl.OrganizationEventServiceImpl">
+		<property name="organizationEventDao" ref="organizationEventDao" />
+	</bean>
+
+	<bean class="jatis.va.main.services.CDCSoapWS">
+		<property name="cdcProcessor" ref="cdcProcessor" />
+	</bean>
+
+	<bean id="cdcProcessor" class="jatis.va.main.services.processor.CDCProcessorImpl">
+		<property name="memberAccountService" ref="memberAccountService" />
+		<property name="pdsCardService" ref="pdsCardService" />
+		<property name="membershipService" ref="membershipService" />
+		<property name="peopleService" ref="peopleService" />
+		<property name="transactionService" ref="transactionService" />
+		<property name="smsTemplateService" ref="smsTemplateService" />
+		<property name="organizationService" ref="organizationService" />
+		<property name="cashbackPoolDao" ref="cashbackPoolDao" />
+		<property name="transactionHeaderService" ref="transactionHeaderService" />
+	</bean> -->
+</beans>

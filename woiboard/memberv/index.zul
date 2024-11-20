@@ -1,0 +1,11 @@
+<zk>
+<window border="none">
+
+<zscript>
+<![CDATA[
+	Executions.forward(jatis.va.main.constant.UrlConstant.MEMBER_WORKSPACE);
+]]>
+</zscript>
+
+</window>
+</zk>

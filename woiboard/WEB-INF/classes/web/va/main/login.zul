@@ -1,0 +1,283 @@
+<?page title="Virtual Account Application" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns:w="client" xmlns:h="xhtml" xmlns:ca="client/attribute">
+<!-- <style src="/widgets/input/form_sample/style.css" /> -->
+<window border="none" id="winDashboardLogin"
+		apply="jatis.va.main.controller.SpecificLoginComposer">
+
+		<borderlayout height="670px" width="100%" >
+			<center border="0">
+				<panel style="margin-bottom:10px; margin-top: 5px;"
+					border="0">
+					<panelchildren>
+						<grid>
+							<rows>
+								<row id="messageRow" visible="false">
+									<cell align="right">
+										<label id="errCommonError"
+											style="color:red;font-style:italic">
+										</label>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+						<separator />
+						<borderlayout height="700px" id="blLogin">
+
+							<center border="0">
+								<groupbox mold="3d" closable="false"
+									width="40%" contentStyle="border:0"
+									style="border:0;margin-top:10%; padding-left:30%;padding-right:32%"
+									top="300px" id="teddy">
+									<div id="divBannerImage"
+										align="center" />
+									<h:form id="form"
+										action="j.logincheck" method="POST">
+										<h:input type="hidden"
+											id="h_userdomain" name="userdomain" value="admin" />
+										<grid id="grdLogin">
+											<rows>
+												<row>
+													<label
+														value="${c:l('va.co.username')}" />
+													<textbox
+														id="txtUsername" name="j_username" />
+												</row>
+												<row>
+													<label
+														value="${c:l('va.co.password')}" />
+													<textbox
+														id="txtPassword" name="j_password" type="password"
+														ca:autocomplete="off" />
+												</row>
+												<row>
+													<!-- fixing BI license 18/11/2020 : remove Remember Password -->
+													<!--<div>-->
+														<!--<checkbox-->
+															<!--id="chkRemember" name="j_spring_security_remember_me" />-->
+														<!--<label-->
+															<!--value="${c:l('va.common.remember.password')}" />-->
+													<!--</div>-->
+													<label value=""/>
+													<hbox>
+														<image
+															id="img_Captcha" />
+														<toolbarbutton
+															id="btnReCaptcha" tooltiptext="ReCaptcha" />
+													</hbox>
+												</row>
+												<row>
+													<a
+														id="lnkForgetPassword">
+														<label
+															value="${c:l('va.co.forgot.password')}" />
+													</a>
+
+													<hbox>
+														<textbox
+															id="txtb_VerifyCaptcha" maxlength="6" width="150px" />
+														<toolbarbutton
+															id="btnVerifyCaptcha" tooltiptext="input captcha" />
+													</hbox>
+												</row>
+												<row>
+													<label value=" " />
+													<h:input
+														type="submit" id="btnLogin"
+														value="${c:l('va.common.login')}" />
+												</row>
+											</rows>
+										</grid>
+									</h:form>
+								</groupbox>
+
+							</center>
+
+						</borderlayout>
+						<borderlayout id="blChangePassword" height="700px">
+							<center border="0">
+								<groupbox mold="3d" closable="false"
+										  width="40%" contentStyle="border:0"
+										  style="border:0;margin-top:11%; padding-left:30%;padding-right:32%"
+										  top="300px" id="ChangePasswordGroupBox">
+									<div>
+										<div id="divBannerChangePassword" align="center"/>
+										<grid id="grdChangePassword">
+											<rows>
+												<row>
+													<label
+															value="Old Password" />
+													<textbox
+															id="txtOldPassword" type="password"/>
+												</row>
+												<row>
+													<label
+															value="Change Password" />
+													<textbox
+															id="txtChangePassword" type="password"/>
+												</row>
+												<row>
+													<label
+															value="Retype Change Password" />
+													<textbox
+															id="txtRetypeChangePassword" type="password"/>
+												</row>
+												<row>
+													<cell align="right" hflex="1">
+														<hbox style="display: flex; justify-content: flex-end;">
+															<button id="btnSave" width="75px"
+																	label="${c:l('va.common.save')}">
+															</button>
+														</hbox>
+													</cell>
+													<button id="btnBack" width="75px"
+															label="${c:l('va.common.back')}">
+													</button>
+												</row>
+											</rows>
+										</grid>
+									</div>
+								</groupbox>
+							</center>
+						</borderlayout>
+						<borderlayout id="blOtp" height="700px">
+							<center border="0">
+								<groupbox mold="3d" closable="false"
+										  width="40%" contentStyle="border:0"
+										  style="border:0;margin-top:11%; padding-left:30%;padding-right:32%"
+										  top="300px" id="otpGroupBox">
+									<div>
+										<div id="divBannerOtp" align="center"/>
+										<grid id="grdOtp">
+											<rows>
+												<row>
+													<label value="${c:l('va.co.otp')}"/>
+													<textbox id="txtOtp" maxlength="6" name="txtOtp" type="password"/>
+												</row>
+												<row>
+													<hbox>
+														<label value="${c:l('va.co.label.resend.otp')}"/>
+														<label id="labelCount" sclass="count"
+															   value="${c:l('va.co.count.otp')}"/>
+														<span id="reOtpView">
+															<a id="lnkResendOtp">
+																<label value="${c:l('va.co.resend.otp')}"/>
+															</a>
+														</span>
+													</hbox>
+													<hbox>
+														<button id="btnSubmitOtp" width="75px"
+																label="${c:l('va.common.otp')}">
+														</button>
+														<button id="btnBackOtp" width="75px"
+																label="${c:l('va.common.back')}">
+														</button>
+													</hbox>
+												</row>
+											</rows>
+										</grid>
+									</div>
+								</groupbox>
+							</center>
+						</borderlayout>
+
+						<!-- MFA START -->
+						<borderlayout id="blMfaOtp" height="700px">
+							<center border="0">
+								<groupbox mold="3d" closable="false"
+										  width="40%" contentStyle="border:0"
+										  style="border:0;margin-top:11%; padding-left:30%;padding-right:32%"
+										  top="300px" id="mfaOtpGroupBox">
+									<div>
+										<div id="divBannerMfaOtp" align="center"/>
+										<grid id="grdMfaOtp">
+											<rows>
+												<row height="40px">
+													<cell colspan="2">
+														<button id="btnMfaCancel" width="50px" label="${c:l('va.common.back')}" />
+													</cell>
+												</row>
+												<row>
+													<cell colspan="2">
+														<label value="${c:l('va.co.mfa.title')}"
+															   style="font-weight:bold; font-size:16pt; color:black;"
+														/>
+													</cell>
+												</row>
+												<row height="60px">
+													<cell colspan="2">
+														<label value="${c:l('va.co.mfa.message')}"
+															   style="font-size:10pt;"
+														/>
+													</cell>
+												</row>
+												<row>
+													<label value="${c:l('va.co.username')}" />
+													<label id="labelMfaUsername" style="color: #0174D9" />
+												</row>
+												<row>
+													<label value="${c:l('va.personal.emailDTO')}" />
+													<label id="labelMfaEmail" style="color: #0174D9" />
+												</row>
+												<row>
+													<label value="${c:l('va.co.otp')}" />
+													<textbox
+															id="txtMfaOtp"
+															maxlength="6"
+															width="95%" height="30px"
+															style="font-size:14pt; font-weight:bold; text-align:center;"
+															constraint="/^(\s*|\d+)$/: Please "
+													>
+													<attribute w:name="doKeyDown_" name="doKeyDown_"><![CDATA[
+															function (evt) {
+																var keyCode = event.keyCode;
+																if( keyCode == 8 // back space
+																	|| keyCode == 13 // enter
+																	|| keyCode == 16 // enter
+																	|| (keyCode >= 35 && keyCode <= 40) // home, end, arrows
+																	|| keyCode == 46) { // Delete
+																	this.$doKeyDown_(evt);
+																} else if ( !evt.shiftKey &&  // only do without shift key
+																	(keyCode >= 48 && keyCode <= 57)
+																	|| (keyCode >= 96 && keyCode <= 105)) {// number range
+																	this.$doKeyDown_(evt);
+																} else {
+																	evt.stop();
+																	return;
+																}
+															}
+														]]></attribute>
+													</textbox>
+												</row>
+												<row>
+													<div>
+														<label id="labelMfaTimer" />
+														<a id="lnkMfaResend" label="${c:l('va.co.mfa.resend')}" style="color:#0174d9;" />
+													</div>
+													<button id="btnMfaSubmit" label="${c:l('va.co.mfa.submit')}" />
+												</row>
+											</rows>
+										</grid>
+									</div>
+								</groupbox>
+							</center>
+						</borderlayout>
+						<!-- MFA END -->
+
+						<separator />
+					</panelchildren>
+				</panel>
+			</center>
+		</borderlayout>
+	</window>
+
+	<script>
+    zk.afterMount(function(){
+     jq("$form").submit(function(){
+       zAu.send(new zk.Event(zk.Widget.$(this), 'onSubmit'));
+       return false;
+     });
+    });
+  </script>
+</zk>
+

@@ -1,0 +1,11 @@
+<zk>
+<window border="none">
+
+<zscript>
+<![CDATA[
+	Executions.forward(jatis.va.member.constant.UrlConstant.ECOMMERCE_CHECKOUT);
+]]>
+</zscript>
+
+</window>
+</zk>
